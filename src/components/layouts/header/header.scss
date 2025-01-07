@@ -2,9 +2,8 @@ $class: header;
 
 .#{$class} {
   &__container {
-    max-width: 1024px;
-    margin: 0 auto;
-    padding: 12px 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
   }
 
   &__logo {
