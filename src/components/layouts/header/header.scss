@@ -1,0 +1,14 @@
+$class: header;
+
+.#{$class} {
+  &__container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 12px 24px;
+  }
+
+  &__logo {
+    font-weight: 700;
+    font-size: 32px;
+  }
+}
