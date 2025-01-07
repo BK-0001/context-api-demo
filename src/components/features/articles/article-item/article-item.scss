@@ -1,0 +1,44 @@
+$class: article-item;
+
+.#{$class} {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgb(225, 225, 225);
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(93, 93, 93);
+  }
+
+  &__contents {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__texts {
+    flex: 7;
+  }
+  &__img {
+    flex: 3;
+    max-height: 96px;
+    overflow: hidden;
+  }
+
+  &__additional-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+}
