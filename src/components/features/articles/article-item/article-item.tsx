@@ -32,13 +32,9 @@ export function ArticleItem({ article }: Props) {
         </div>
       </div>
       <div className={`${BASE_CLASS}__additional-info`}>
-        <p>
-          {article.createdAt.toLocaleDateString("us-en", {
-            dateStyle: "medium"
-          })}
-        </p>
+        <p>{article.createdAt}</p>
         <div>icon {article.likes}</div>
-        <div>icon {article.comments.length}</div>
+        <div>icon {article.comments?.length || 0}</div>
       </div>
     </li>
   );

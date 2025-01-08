@@ -2,10 +2,10 @@ export type Article = {
   id: string;
   title: string;
   description: string;
-  createdAt: Date;
+  createdAt: string;
   thumbnail: string;
   likes: number;
-  comments: [];
+  comments?: [];
   author: {
     id: string;
     name: string;
