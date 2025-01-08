@@ -31,15 +31,12 @@ export function Home() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const data: Omit<Article, "id" | "comments"> = {
+    const data: Omit<Article, "id" | "comments" | "author"> & {
+      authorId: string;
+    } = {
       title,
       description,
-      author: {
-        name: "David Pereira",
-        avatar:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCythtaM-iOKWi0JUUiQtcC3CH8o9bhUDiaFY53ZRWXFa4mGuVRFevtTZlWDusVoP6dl3e",
-        id: "1"
-      },
+      authorId: "1",
       createdAt: new Date().toLocaleDateString("us-en", {
         dateStyle: "medium"
       }),
@@ -48,10 +45,16 @@ export function Home() {
         "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQluFl3GfQDXohBaH-xG3GuRi8T4MDIQPRpCqUGLiE5tXdXbUO0hRFwnshvzg07igEgGg7i"
     };
 
-    const response = await fetch("http://localhost:8000/articles", {
-      body: JSON.stringify(data),
-      method: "POST"
-    });
+    const response = await fetch(
+      "http://localhost:8000/articles?_expand=author&_embed=comments",
+      {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+        method: "POST"
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Something wrong while creating article");

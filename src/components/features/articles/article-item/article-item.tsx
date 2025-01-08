@@ -10,15 +10,17 @@ const BASE_CLASS = "article-item";
 export function ArticleItem({ article }: Props) {
   return (
     <li className={BASE_CLASS}>
-      <div className={`${BASE_CLASS}__author`}>
-        <div className="avatar">
-          <img
-            src={article.author.avatar}
-            alt={`author ${article.author.name} image`}
-          />
+      {article.author && (
+        <div className={`${BASE_CLASS}__author`}>
+          <div className="avatar">
+            <img
+              src={article.author.avatar}
+              alt={`author ${article.author.name} image`}
+            />
+          </div>
+          <p>{article.author.name}</p>
         </div>
-        <p>{article.author.name}</p>
-      </div>
+      )}
       <div className={`${BASE_CLASS}__contents`}>
         <div className={`${BASE_CLASS}__texts`}>
           <h2>{article.title}</h2>
@@ -34,7 +36,7 @@ export function ArticleItem({ article }: Props) {
       <div className={`${BASE_CLASS}__additional-info`}>
         <p>{article.createdAt}</p>
         <div>icon {article.likes}</div>
-        <div>icon {article.comments.length || 0}</div>
+        <div>icon {article.comments?.length || 0}</div>
       </div>
     </li>
   );

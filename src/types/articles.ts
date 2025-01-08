@@ -5,8 +5,8 @@ export type Article = {
   createdAt: string;
   thumbnail: string;
   likes: number;
-  comments: [];
-  author: {
+  comments?: [];
+  author?: {
     id: string;
     name: string;
     avatar: string;
