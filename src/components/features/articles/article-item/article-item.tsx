@@ -34,7 +34,7 @@ export function ArticleItem({ article }: Props) {
       <div className={`${BASE_CLASS}__additional-info`}>
         <p>{article.createdAt}</p>
         <div>icon {article.likes}</div>
-        <div>icon {article.comments?.length || 0}</div>
+        <div>icon {article.comments.length || 0}</div>
       </div>
     </li>
   );

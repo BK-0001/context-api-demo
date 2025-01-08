@@ -13,7 +13,7 @@ export function Home() {
   useEffect(() => {
     const getArticles = async () => {
       const response = await fetch(
-        "http://localhost:8000/articles?_embed=comments"
+        "http://localhost:8000/articles?_expand=author&_embed=comments"
       );
 
       if (!response.ok) {
