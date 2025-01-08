@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Container } from "../../components/common/container/container";
-import { AddArticleForm } from "../../components/features/articles/add-article-form/add-article-form";
+import { ArticleForm } from "../../components/features/articles/article-form/article-form";
 import { ArticleList } from "../../components/features/articles/article-list/article-list";
 import { Article } from "../../types/articles";
 import "./home.scss";
@@ -65,6 +65,43 @@ export function Home() {
     setArticles((prevState) => [...prevState, article]);
   };
 
+  const handleEdit = async (
+    event: FormEvent<HTMLFormElement>,
+    id: Article["id"],
+    title: string,
+    description: string
+  ) => {
+    event.preventDefault();
+
+    const data: Partial<Article> & {
+      authorId?: string;
+    } = {
+      title,
+      description
+    };
+
+    const response = await fetch(`http://localhost:8000/articles/${id}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH",
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Something wrong while updating article with id ${id}`);
+    }
+
+    const updatedArticle = await response.json();
+
+    // update state
+    setArticles((prevState) =>
+      prevState.map((article) =>
+        article.id === updatedArticle.id ? updatedArticle : article
+      )
+    );
+  };
+
   const handleDelete = async (id: Article["id"]) => {
     const response = await fetch(`http://localhost:8000/articles/${id}`, {
       method: "DELETE"
@@ -85,14 +122,19 @@ export function Home() {
   return (
     <main>
       <Container>
-        <AddArticleForm
+        <ArticleForm
           title={title}
           description={description}
           onSubmit={handleSubmit}
           onTitleChange={(event) => setTitle(event.target.value)}
           onDescriptionChange={(event) => setDescription(event.target.value)}
         />
-        <ArticleList articles={articles} onDelete={handleDelete} />
+
+        <ArticleList
+          articles={articles}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </Container>
     </main>
   );

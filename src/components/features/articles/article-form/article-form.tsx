@@ -1,14 +1,14 @@
 import { ChangeEvent, FormEvent } from "react";
 
 type Props = {
-  title: string;
-  description: string;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  onTitleChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onDescriptionChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  title?: string;
+  description?: string;
+  onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
+  onTitleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onDescriptionChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function AddArticleForm({
+export function ArticleForm({
   title,
   description,
   onSubmit,
