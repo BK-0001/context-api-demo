@@ -65,6 +65,23 @@ export function Home() {
     setArticles((prevState) => [...prevState, article]);
   };
 
+  const handleDelete = async (id: Article["id"]) => {
+    const response = await fetch(`http://localhost:8000/articles/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `something has gone wrong while deleting article with id ${id}`
+      );
+    }
+
+    // update state
+    setArticles((prevState) =>
+      prevState.filter((article) => article.id !== id)
+    );
+  };
+
   return (
     <main>
       <Container>
@@ -75,7 +92,7 @@ export function Home() {
           onTitleChange={(event) => setTitle(event.target.value)}
           onDescriptionChange={(event) => setDescription(event.target.value)}
         />
-        <ArticleList articles={articles} />
+        <ArticleList articles={articles} onDelete={handleDelete} />
       </Container>
     </main>
   );

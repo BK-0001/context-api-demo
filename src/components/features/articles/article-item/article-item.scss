@@ -29,10 +29,22 @@ $class: article-item;
     overflow: hidden;
   }
 
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   &__additional-info {
     display: flex;
     align-items: center;
     gap: 16px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 }
 
@@ -41,4 +53,9 @@ $class: article-item;
   height: 28px;
   border-radius: 50%;
   overflow: hidden;
+}
+
+.button {
+  border: none;
+  background-color: none;
 }
