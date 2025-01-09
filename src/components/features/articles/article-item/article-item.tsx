@@ -7,20 +7,20 @@ import "./article-item.scss";
 
 type Props = {
   article: Article;
+  isEditing: boolean;
+  onToggleEdit: () => void;
 };
 
 const BASE_CLASS = "article-item";
 
-export function ArticleItem({ article }: Props) {
+export function ArticleItem({ article, isEditing, onToggleEdit }: Props) {
   const { edit, remove } = useArticleContext();
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(article.title);
   const [description, setDescription] = useState<string>(article.description);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     edit(e, article.id, title, description);
-    setIsEditing(false);
   };
 
   return (
@@ -65,10 +65,7 @@ export function ArticleItem({ article }: Props) {
           <div>icon {article.comments?.length || 0}</div>
         </div>
         <div className={`${BASE_CLASS}__actions`}>
-          <button
-            className="button"
-            onClick={() => setIsEditing((prevState) => !prevState)}
-          >
+          <button className="button" onClick={onToggleEdit}>
             <MdModeEdit />
           </button>
           <button className="button" onClick={() => remove(article.id)}>
