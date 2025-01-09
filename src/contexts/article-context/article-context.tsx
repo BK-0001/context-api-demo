@@ -6,9 +6,16 @@ import {
   ReactNode,
   useContext,
   useEffect,
-  useState
+  useReducer
 } from "react";
 import { Article } from "../../types/articles";
+import {
+  createArticle,
+  deleteArticle,
+  editArticle,
+  initArticles
+} from "./article-actions";
+import { articleReducer } from "./article-reducer";
 
 type ArticleContextType = {
   articles: Article[];
@@ -42,7 +49,7 @@ type Props = {
 };
 
 export const ArticleContextProvider = ({ children }: Props) => {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, dispatch] = useReducer(articleReducer, []);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -56,7 +63,7 @@ export const ArticleContextProvider = ({ children }: Props) => {
 
       const data = await response.json();
 
-      setArticles(data);
+      dispatch(initArticles(data));
     };
 
     getArticles();
@@ -100,7 +107,7 @@ export const ArticleContextProvider = ({ children }: Props) => {
 
     const article: Article = await response.json();
 
-    setArticles((prevState) => [...prevState, article]);
+    dispatch(createArticle(article));
   };
 
   const edit = async (
@@ -133,11 +140,7 @@ export const ArticleContextProvider = ({ children }: Props) => {
     const updatedArticle = await response.json();
 
     // update state
-    setArticles((prevState) =>
-      prevState.map((article) =>
-        article.id === updatedArticle.id ? updatedArticle : article
-      )
-    );
+    dispatch(editArticle(updatedArticle));
   };
 
   const remove = async (id: Article["id"]) => {
@@ -151,10 +154,7 @@ export const ArticleContextProvider = ({ children }: Props) => {
       );
     }
 
-    // update state
-    setArticles((prevState) =>
-      prevState.filter((article) => article.id !== id)
-    );
+    dispatch(deleteArticle(id));
   };
 
   return (

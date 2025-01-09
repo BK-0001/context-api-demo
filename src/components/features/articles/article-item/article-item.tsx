@@ -21,6 +21,7 @@ export function ArticleItem({ article, isEditing, onToggleEdit }: Props) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     edit(e, article.id, title, description);
+    onToggleEdit();
   };
 
   return (
