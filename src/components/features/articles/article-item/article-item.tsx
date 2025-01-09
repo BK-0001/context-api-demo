@@ -1,29 +1,25 @@
 import { FormEvent, useState } from "react";
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
+import { useArticleContext } from "../../../../contexts/article-context/article-context";
 import { Article } from "../../../../types/articles";
 import { ArticleForm } from "../article-form/article-form";
 import "./article-item.scss";
 
 type Props = {
   article: Article;
-  onDelete: () => void;
-  onEdit: (
-    event: FormEvent<HTMLFormElement>,
-    id: Article["id"],
-    title: string,
-    description: string
-  ) => void;
 };
 
 const BASE_CLASS = "article-item";
 
-export function ArticleItem({ article, onEdit, onDelete }: Props) {
+export function ArticleItem({ article }: Props) {
+  const { edit, remove } = useArticleContext();
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(article.title);
   const [description, setDescription] = useState<string>(article.description);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    onEdit(e, article.id, title, description);
+    edit(e, article.id, title, description);
     setIsEditing(false);
   };
 
@@ -75,7 +71,7 @@ export function ArticleItem({ article, onEdit, onDelete }: Props) {
           >
             <MdModeEdit />
           </button>
-          <button className="button" onClick={onDelete}>
+          <button className="button" onClick={() => remove(article.id)}>
             <MdDeleteForever />
           </button>
         </div>
