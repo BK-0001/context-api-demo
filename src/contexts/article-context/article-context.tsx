@@ -8,6 +8,7 @@ import {
   useEffect,
   useReducer
 } from "react";
+import { useFetch } from "../../hooks/use-fetch";
 import { Article } from "../../types/articles";
 import {
   createArticle,
@@ -18,6 +19,7 @@ import {
 import { articleReducer } from "./article-reducer";
 
 type ArticleContextType = {
+  hasError: boolean;
   articles: Article[];
   create: (
     event: FormEvent<HTMLFormElement>,
@@ -34,6 +36,7 @@ type ArticleContextType = {
 };
 
 const INITIAL_CONTEXT = {
+  hasError: false,
   articles: [],
   create: () => {},
   edit: () => {},
@@ -50,24 +53,19 @@ type Props = {
 
 export const ArticleContextProvider = ({ children }: Props) => {
   const [articles, dispatch] = useReducer(articleReducer, []);
+  const {
+    data,
+    error: initialArticleError,
+    post
+  } = useFetch<Article[]>(
+    "http://localhost:8000/articles?_expand=author&_embed=comments"
+  );
 
   useEffect(() => {
-    const getArticles = async () => {
-      const response = await fetch(
-        "http://localhost:8000/articles?_expand=author&_embed=comments"
-      );
-
-      if (!response.ok) {
-        throw new Error("Something has gone wrong while getting the articles");
-      }
-
-      const data = await response.json();
-
+    if (data) {
       dispatch(initArticles(data));
-    };
-
-    getArticles();
-  }, []);
+    }
+  }, [data]);
 
   const create = async (
     event: FormEvent<HTMLFormElement>,
@@ -90,22 +88,13 @@ export const ArticleContextProvider = ({ children }: Props) => {
         "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQluFl3GfQDXohBaH-xG3GuRi8T4MDIQPRpCqUGLiE5tXdXbUO0hRFwnshvzg07igEgGg7i"
     };
 
-    const response = await fetch(
+    const article = await post(
       "http://localhost:8000/articles?_expand=author&_embed=comments",
       {
-        headers: {
-          "Content-Type": "application/json"
-        },
         body: JSON.stringify(data),
         method: "POST"
       }
     );
-
-    if (!response.ok) {
-      throw new Error("Something wrong while creating article");
-    }
-
-    const article: Article = await response.json();
 
     dispatch(createArticle(article));
   };
@@ -158,7 +147,15 @@ export const ArticleContextProvider = ({ children }: Props) => {
   };
 
   return (
-    <ArticleContext.Provider value={{ articles, create, edit, remove }}>
+    <ArticleContext.Provider
+      value={{
+        hasError: !!initialArticleError,
+        articles,
+        create,
+        edit,
+        remove
+      }}
+    >
       {children}
     </ArticleContext.Provider>
   );
